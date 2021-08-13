@@ -1,4 +1,4 @@
-package com.ww;
+package com.ww.question;
 
 /**
  * @author xiaohua

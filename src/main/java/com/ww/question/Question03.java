@@ -1,4 +1,4 @@
-package com.ww;
+package com.ww.question;
 
 /**
  * @author xiaohua
@@ -14,19 +14,8 @@ public class Question03 {
     public static void main(String[] args) {
         Question03 question03 = new Question03();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                question03.printNum();
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                question03.printLetter();
-            }
-        }).start();
+        new Thread(() -> question03.printNum()).start();
+        new Thread(() -> question03.printLetter()).start();
     }
 
     /**

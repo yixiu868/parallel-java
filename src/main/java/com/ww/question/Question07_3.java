@@ -1,4 +1,4 @@
-package com.ww;
+package com.ww.question;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;

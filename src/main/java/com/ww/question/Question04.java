@@ -1,4 +1,4 @@
-package com.ww;
+package com.ww.question;
 
 /**
  * @author xiaohua
@@ -12,26 +12,9 @@ public class Question04 {
     public static void main(String[] args) {
         Question04 abc = new Question04();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                abc.printA();
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                abc.printB();
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                abc.printC();
-            }
-        }).start();
+        new Thread(() -> abc.printA()).start();
+        new Thread(() -> abc.printB()).start();
+        new Thread(() -> abc.printC()).start();
     }
 
     public synchronized void printA() {

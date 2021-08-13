@@ -1,4 +1,4 @@
-package com.ww;
+package com.ww.question;
 
 /**
  * @author xiaohua
@@ -8,19 +8,25 @@ package com.ww;
 public class Question01 {
 
     public static void main(String[] args) {
-        PrintThread a = new PrintThread("a");
-        PrintThread b = new PrintThread("b");
-        PrintThread c = new PrintThread("c");
+        PrintThread a = new PrintThread("线程a");
+        PrintThread b = new PrintThread("线程b");
+        PrintThread c = new PrintThread("线程c");
 
         try {
+            System.out.println("线程a开始执行...");
             a.start();
             a.join();
+            System.out.println("线程a执行完成.");
 
+            System.out.println("线程b开始执行...");
             b.start();
             b.join();
+            System.out.println("线程b执行完成.");
 
+            System.out.println("线程c开始执行...");
             c.start();
             c.join();
+            System.out.println("线程c执行完成.");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -33,7 +39,7 @@ public class Question01 {
 
         @Override
         public void run() {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
                 System.out.println(getName() + ": " + i);
             }
         }
