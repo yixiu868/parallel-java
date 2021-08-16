@@ -31,9 +31,9 @@
 线程中断不会使线程立即退出，而是给线程发送一个通知，告知目标线程，有人希望你退出啦！至于目标线程接到通知后如何处理，则完全由目标线程自行决定。这点很重要，如果中断后，线程立即无条件退出，又会遇到stop()方法的老问题。
 
 ```java
-public void Thread.interrupt() // 中断线程，通知目标线程中断，设置中断标志位
-public boolean Thread.isInterrupted() // 判断是否被中断
-public static boolean Thread.interrupted() // 判断是否被中断，并清除当前中断状态
+public void Thread.interrupt(); // 中断线程，通知目标线程中断，设置中断标志位
+public boolean Thread.isInterrupted(); // 判断是否被中断
+public static boolean Thread.interrupted(); // 判断是否被中断，并清除当前中断状态
 ```
 
 ### 挂起(suspend)和继续执行(resume)线程

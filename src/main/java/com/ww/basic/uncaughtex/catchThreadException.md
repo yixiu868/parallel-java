@@ -1,0 +1,7 @@
+# 线程异常捕获
+
+由于线程的本质，使你不能捕获从线程中逃逸的异常，一旦异常逃出任务的run方法，它就会向外传播到控制台，除非你采用特殊的步骤捕获这种错误的异常。在Java5之后，需要使用Executor来解决这个问题。
+
+为了解决这个问题，我们需要修改Executor产生线程的方式，Java5提供了一个新的接口`Thread.UncaughtExceptionHandler`，它允许你在每个Thread上都附着一个异常处理器。
+
+在程序中添加额外的追踪机制，用来验证工厂创建的线程会传递给`UncaughtExceptionHandler`，你可以看到，未捕获的异常时通过`uncaughtException`来捕获的。
