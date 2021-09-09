@@ -152,3 +152,4 @@ public synchronized void syncTask();
 
 [深入研究synchronized锁升级](https://www.cnblogs.com/trunks2008/p/14646610.html#top)
 
+![1c92f8c9bd79aea7f22846f976373dd2_640_wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1](img\1c92f8c9bd79aea7f22846f976373dd2_640_wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1.webp)

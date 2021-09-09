@@ -13,7 +13,8 @@ public class ConcreteStorage implements AbstractStorage {
     private static final int MAX_SIZE = 100;
 
     // 仓库存储结构
-    private LinkedList list = new LinkedList();
+    @SuppressWarnings("rawtypes")
+	private LinkedList list = new LinkedList();
 
     @Override
     public void consume(int num) {
@@ -42,7 +43,8 @@ public class ConcreteStorage implements AbstractStorage {
      * 生产
      * @param num
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void produce(int num) {
         synchronized (list) {
             while (list.size() + num > MAX_SIZE) {

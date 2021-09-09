@@ -11,7 +11,8 @@ import java.util.concurrent.atomic.AtomicStampedReference;
  */
 public class AtomicStampedDemo02 {
 
-    private static AtomicInteger index = new AtomicInteger(10);
+    @SuppressWarnings("unused")
+	private static AtomicInteger index = new AtomicInteger(10);
 
     static AtomicStampedReference<Integer> stampRef = new AtomicStampedReference<>(10, 1);
 
