@@ -34,3 +34,14 @@
 
 ![640](img\640.webp)
 
+## 常见线程池面试题
+
+* 1）你使用什么创建线程池？
+
+要回答使用`ThreadPoolExecutor`创建线程池，你之前有两次面试时回答说使用newFixedThreadPool()，这个回答不好，不符合阿里巴巴手册规范，因为newFixedThreadPool创建的线程池队列Integer.MAX_VALUE，是存在隐患的。
+
+* 2）线程池怎么设置线程数？
+
+看业务类型是CPU密集型还是IO密集型。运行应用的机器CPU核数量为N。
+
+CPU密集型可以先给到N+1；IO密集型可以给到2N。这些是经验值。具体多少要使用压测。

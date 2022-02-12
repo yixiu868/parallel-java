@@ -1,5 +1,7 @@
 package com.ww.juc;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,13 +18,13 @@ public class SemaphoreDemo01 {
 
     private static int count = 20;
 
-    public static void main(String[] args) {
-        ExecutorService service = Executors.newFixedThreadPool(2);
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        ExecutorService service = Executors.newFixedThreadPool(10);
 
         // 指定最多只能有5个线程同时执行
         Semaphore semaphore = new Semaphore(5, true);
 
-        Random random = new Random();
+        Random random = SecureRandom.getInstanceStrong();
         for (int i = 0; i < count; i++) {
             final int no = i;
             service.submit(() -> {

@@ -12,7 +12,7 @@ public class CyclicBarrierDemo01 {
 
     public static void main(String[] args) {
 //        CyclicBarrier barrier = new CyclicBarrier(3);
-        CyclicBarrier barrier = new CyclicBarrier(1, () -> {
+        CyclicBarrier barrier = new CyclicBarrier(3, () -> {
             try {
                 System.out.println("等裁判吹口哨...");
                 TimeUnit.SECONDS.sleep(2);
@@ -26,7 +26,7 @@ public class CyclicBarrierDemo01 {
         Runner runner2 = new Runner(barrier, "李四");
         Runner runner3 = new Runner(barrier, "王五");
 
-        ExecutorService service = Executors.newFixedThreadPool(1);
+        ExecutorService service = Executors.newFixedThreadPool(3);
         service.submit(runner1);
         service.submit(runner2);
         service.submit(runner3);
@@ -52,6 +52,7 @@ public class CyclicBarrierDemo01 {
                 System.out.println(name + "：准备OK");
                 barrier.await();
                 System.out.println(name + "：开跑");
+                System.out.println("------------------");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (BrokenBarrierException e) {
