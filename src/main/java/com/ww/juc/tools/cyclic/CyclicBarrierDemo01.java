@@ -1,4 +1,4 @@
-package com.ww.juc;
+package com.ww.juc.tools.cyclic;
 
 import java.util.Random;
 import java.util.concurrent.*;

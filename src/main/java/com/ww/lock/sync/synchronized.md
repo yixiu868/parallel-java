@@ -1,5 +1,13 @@
 # synchronized锁
 
+## synchronized原理讲解
+
+从JVM规范中可以看到Synchonized在JVM里的实现原理，JVM基于进入和退出Monitor对象来实现方法同步和代码块同步，但两者的实现细节不一样，代码块同步是使用monitorenter和monitorexit指令实现的，而方法同步是使用另外一种方式实现的，细节在JVM规范并没有详细说明，但是，方法的同步同样可以使用这两个指令来实现的。
+
+`monitorenter指令是在编译后插入到同步代码块的开始位置，而monitorexit是插入到方法结束处和异常处，JVM要保证每个monitorenter必须有对应的monitorexit与之配对`。任何对象都有一个monitor与之关联，当且一个monitor被持有后，它将处于锁定状态。线程执行到monitorenter指令时，将会尝试获取对象所对应的monitor的所有权，即尝试获得对象的锁。
+
+
+
 ## 为什么synchronized成为重量级锁（JDK1.6）
 
 JDK1.6之前是重量级锁，线程进入同步代码块/方法时，monitor对象就会把当前线程的id进行存储，设置Mark Word的monitor对象地址，并把阻塞的线程存储到monitor等待线程队列中。
@@ -49,7 +57,7 @@ ObjectMonitor() {
 
 ##### 同步代码块
 
-synchronized同步代码块，在代码块开始的位置插入monitorentry指令，在同步结束的位置或者异常出现的位置插入monitorexit指令，JVM要保证monitorentry和monitorexit成对出现。
+synchronized同步代码块，在代码块开始的位置插入monitorentry指令，在同步结束的位置或者异常出现的位置插入monitorexit指令，JVM要保证`monitorentry和monitorexit`成对出现。
 
 ```java
 public class SyncCodeBlock {
@@ -95,7 +103,7 @@ public void syncTask();
 
 ##### 同步方法
 
-synchronized同步方法不再是通过插入monitorentry和monitorexit指令实现，而是由方法调用指令来读取运行时常量池中的ACC_SYNCHRONIZED标志隐式实现的。
+synchronized同步方法不再是通过插入monitorentry和monitorexit指令实现，而是由方法调用指令来读取运行时常量池中的`ACC_SYNCHRONIZED标志隐式实现的`。
 
 ```java
 public class SyncMethod {

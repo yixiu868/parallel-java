@@ -1,4 +1,4 @@
-package com.ww.juc;
+package com.ww.juc.tools.countdown;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

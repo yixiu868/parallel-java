@@ -4,6 +4,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
+ * 阻塞队列实现生产者、消费者
  * @author xiaohua
  * @date 2021-3-31 18:22
  */

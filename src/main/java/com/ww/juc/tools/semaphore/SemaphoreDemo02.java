@@ -1,4 +1,4 @@
-package com.ww.juc;
+package com.ww.juc.tools.semaphore;
 
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
