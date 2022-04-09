@@ -30,28 +30,46 @@ Java对象大致可分为三个部分，对象头、实例变量和填充字节�
 
 ### 重量级锁原理讲解
 
+[Java~深度剖析synchronized与ObjectMonitor、volatile和内存屏障](https://blog.csdn.net/Shangxingya/article/details/111677184)
+
 重量级锁对应的锁标志位是10，存储了指向重量级监视器锁的指针，在Hotspot中，对象的监视器锁对象由ObjectMonitor对象（C++实现），数据结构如下：
 
 ```c++
 ObjectMonitor() {
-    _count = 0; // 用来记录该对象被线程获取锁的次数
-    _waiters = 0;
-    _recursions = 0; // 锁重入次数
-    _owner = NULL; // 指向持有ObjectMonitor对象的线程
-    _WaitSet = NULL; // 处于wait状态的线程，会被加入到_WaitSet
-    _WaitSetLock = 0;
-    _EntryList = NULL; // 处于等待锁block状态的线程，会被加入到该列表
-}
+    _header       = NULL;
+    _count        = 0; //记录个数
+    _waiters      = 0,
+    _recursions   = 0;
+    _object       = NULL;
+    _owner        = NULL;
+    _WaitSet      = NULL; //处于wait状态的线程，会被加入到_WaitSet
+    _WaitSetLock  = 0 ;
+    _Responsible  = NULL ;
+    _succ         = NULL ;
+    _cxq          = NULL ;
+    FreeNext      = NULL ;
+    _EntryList    = NULL ; //处于等待锁block状态的线程，会被加入到该列表
+    _SpinFreq     = 0 ;
+    _SpinClock    = 0 ;
+    OwnerIsThread = 0 ;
+  }
 ```
 
 ![20190403174421871](img\20190403174421871.jpg)
 
-对于一个synchronized修饰的方法（或代码块）来说，执行流程如下：
+> * ObjectMonitor中有两个队列，\_WaitSet和_EntryList
+> * 每个等待锁的线程都会被封装成ObjectWaiter对象
+> * _owner指向持有ObjectMonitor对象的线程，也就是正在访问同步代码块的线程
+> * 当多个线程同时访问一段同步代码时，首先会进入\_EntryList集合，当线程检查\_count为0，进入_Owner区域并把monitor中的owner变量设置为当前线程，同时monitor中的计数器count加1，此时也就意味着这个线程获取到了monitor对象，**当检查到owner不为null的时候就会执行owner指向的这个线程**。
+> * 如果获取monitor对象失败，该线程则会进入阻塞状态，知道其他线程释放锁。
+> * 若线程调用wait()方法，将释放当前持有的monitor，owner变量恢复为null，count自减1，同时该线程进入WaitSet集合中等待被唤醒。若当前线程执行完毕也将释放monitor并复位变量的值，以便其他线程进入获取monitor。
 
-* 1、当多个线程同时访问该方法，那么这些线程会先被放进`_EntryList`队列，此时线程处于blocking状态；
-* 2、当一个线程获取到了实例对象的监视器锁，那么就可以进入running状态，执行方法，此时，ObjectMonitor对象的`_owner`指向当前线程，`_count`加1表示当前对象锁被一个线程获取；
-* 3、当running状态的线程调用wait()方法，那么当前线程释放监视器锁，进入waiting状态，ObjectMonitor对象的`_ower`变为NULL，`_count`减1，同时线程进入_WaitSet队列，直到有线程调用notify()方法唤醒该线程，则该线程重新获取监视器锁对象进入`_owner`区。
-* 4、如果当前线程执行完毕，释放监视器对象，ObjectMonitor对象的`_owner`变为NULL，`_count`减1；
+> 得出结论
+>
+> * 1、monitor对象存在于每个Java对象的对象头中，synchronized锁便是通过这种方式获取锁的，也是为什么Java中任意对象都可以作为锁的原因。
+> * 2、synchronized是通过对象内部的一个叫做monitor来实现的，monitor本质又是依赖于底层操作系统的Mutex Lock（互斥锁）来实现的。
+> * 3、synchronized是可重入的，所以不会自己把自己锁死，在monitor中，多次获取只是计数器count++即可，当释放的时候也只要计数器count减到0，即说明是无锁状态。
+> * 4、synchronized锁一旦被一个线程是有，其他视图获取该锁的线程将被阻塞。操作系统实现阻塞，需要线程之间的切换，从用户态转换到内核态，成本高，状态转换需要时间相对较长，这也就是为什么说synchronized效率低的原因。
 
 #### synchronized修改的代码块、方法如何获取monitor对象？
 
